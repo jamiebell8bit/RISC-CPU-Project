@@ -1,0 +1,140 @@
+// "Div" TB Code
+// Group: 22
+
+// datapath_tb.v file:
+`timescale 1ns/10ps 
+module datapath_div_tb;       
+    reg PCout, Zlowout, Zhighout, MDRout, R3out, R1out;  // Added Zhighout, changed registers     
+    reg MARin, Zin, PCin, MDRin, IRin, Yin;    
+    reg IncPC, Read, DIV, LOin, HIin, R3in, R1in;  // Changed MUL to DIV, added LOin, HIin
+    reg Clock; 
+    reg [31:0] Mdatain;      
+    reg Wait;  // Signal to wait for division completion
+    
+    // add any other signals to see in your simulation 
+    parameter  Default = 4'b0000, Reg_load1a = 4'b0001, Reg_load1b = 4'b0010, 
+               Reg_load2a = 4'b0011, Reg_load2b = 4'b0100, T0 = 4'b0101, 
+               T1 = 4'b0110, T2 = 4'b0111, T3 = 4'b1000, T4 = 4'b1001, 
+               T5 = 4'b1010, T6 = 4'b1011, Wait_state = 4'b1100;  // Added Wait_state
+    
+    reg [3:0] Present_state = Default; 
+    
+    Datapath DUT(
+        PCout, Zlowout, Zhighout, MDRout, R3out, R1out, 
+        MARin, Zin, PCin, MDRin, IRin, Yin, 
+        IncPC, Read, DIV, LOin, HIin, R3in, R1in,  // Changed signals
+        Clock, Mdatain
+    ); 
+    
+    // Clock generation
+    initial begin 
+        Clock = 0; 
+        forever #10 Clock = ~ Clock; 
+    end 
+    
+    // State machine - update on positive clock edge
+    always @(posedge Clock) begin 
+        case (Present_state) 
+            Default:      Present_state = Reg_load1a; 
+            Reg_load1a:   Present_state = Reg_load1b; 
+            Reg_load1b:   Present_state = Reg_load2a; 
+            Reg_load2a:   Present_state = Reg_load2b; 
+            Reg_load2b:   Present_state = T0; 
+            T0:           Present_state = T1; 
+            T1:           Present_state = T2; 
+            T2:           Present_state = T3; 
+            T3:           Present_state = T4; 
+            T4:           Present_state = Wait_state;  // Go to wait state for division
+            Wait_state:   Present_state = T5;  // After division completes
+            T5:           Present_state = T6; 
+            T6:           Present_state = T0; // Loop back or end simulation
+        endcase 
+    end 
+    
+    // Control signal generation based on current state
+    always @(Present_state) begin 
+        case (Present_state)               
+            Default: begin 
+                // Initialize all signals to 0
+                {PCout, Zlowout, Zhighout, MDRout, R3out, R1out} = 6'b0;
+                {MARin, Zin, PCin, MDRin, IRin, Yin} = 6'b0;
+                {IncPC, Read, DIV, LOin, HIin, R3in, R1in} = 7'b0;
+                Mdatain = 32'h00000000;
+                Wait = 0;
+            end 
+            
+            Reg_load1a: begin   // Load R3 with dividend (e.g., 25)
+                Mdatain = 32'h00000019;  // 25 decimal
+                Read = 1; 
+                MDRin = 1;              
+            end 
+            
+            Reg_load1b: begin   // Transfer from MDR to R3
+                MDRout = 1; 
+                R3in = 1;     
+            end 
+            
+            Reg_load2a: begin   // Load R1 with divisor (e.g., 4)
+                Mdatain = 32'h00000004;  // 4 decimal
+                Read = 1; 
+                MDRin = 1;   
+            end 
+            
+            Reg_load2b: begin   // Transfer from MDR to R1
+                MDRout = 1; 
+                R1in = 1;   
+            end 
+            
+            T0: begin   // Fetch: PC -> MAR, PC+1 -> Z
+                PCout = 1; 
+                MARin = 1; 
+                IncPC = 1; 
+                Zin = 1;   
+            end 
+            
+            T1: begin   // Fetch: Z -> PC, Read memory, Mdatain = instruction
+                Zlowout = 1; 
+                PCin = 1; 
+                Read = 1; 
+                MDRin = 1;   
+                Mdatain = 32'h136B0000;  // div R3, R1 opcode (example - adjust based on ISA)
+            end 
+            
+            T2: begin   // Fetch: MDR -> IR
+                MDRout = 1; 
+                IRin = 1;    
+            end 
+            
+            T3: begin   // Execute: R3 (dividend) -> Y
+                R3out = 1; 
+                Yin = 1;    
+            end 
+            
+            T4: begin   // Execute: Start division: R1 (divisor) DIV Y -> Z (64-bit result)
+                R1out = 1; 
+                DIV = 1;    // Start division operation
+                Zin = 1;    // Z will hold both quotient and remainder
+                // Division is multi-cycle, so we'll need to wait
+            end
+            
+            Wait_state: begin  // Wait for division to complete
+                Wait = 1;  // Monitor division complete signal
+                // In a real implementation, you'd check a "done" flag
+                // For simulation, we'll just wait a fixed number of cycles
+                #40;  // Wait 4 clock cycles for division to complete
+            end 
+            
+            T5: begin   // Writeback: Zlow (quotient) -> LO register
+                Zlowout = 1;    // Output lower 32 bits (quotient)
+                LOin = 1;       // Store in LO register
+            end 
+            
+            T6: begin   // Writeback: Zhigh (remainder) -> HI register
+                Zhighout = 1;   // Output upper 32 bits (remainder)
+                HIin = 1;       // Store in HI register
+            end 
+            
+        endcase 
+    end 
+    
+endmodule

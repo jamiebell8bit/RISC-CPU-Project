@@ -1,0 +1,128 @@
+// "Mul" TB Code
+// Group: 22
+
+`timescale 1ns/10ps 
+module datapath_tb;       
+    reg PCout, Zlowout, Zhighout, MDRout, R5out, R6out;    // R5 and R6 source registers     
+    reg MARin, Zin, PCin, MDRin, IRin, Yin;    
+    reg IncPC, Read, MUL, LOin, HIin, R5in, R6in;          // MUL control signal, LO/HI destinations
+    reg Clock; 
+    reg [31:0] Mdatain;      
+    
+    // add any other signals to see in your simulation 
+    parameter  Default = 4'b0000, Reg_load1a = 4'b0001, Reg_load1b = 4'b0010, 
+               Reg_load2a = 4'b0011, Reg_load2b = 4'b0100, T0 = 4'b0101, 
+               T1 = 4'b0110, T2 = 4'b0111, T3 = 4'b1000, T4 = 4'b1001, 
+               T5 = 4'b1010, T6 = 4'b1011;
+    
+    reg [3:0] Present_state = Default; 
+    
+    Datapath DUT(
+        PCout, Zlowout, Zhighout, MDRout, R5out, R6out, 
+        MARin, Zin, PCin, MDRin, IRin, Yin, 
+        IncPC, Read, MUL, LOin, HIin, R5in, R6in,
+        Clock, Mdatain
+    ); 
+    
+    // Clock generation
+    initial begin 
+        Clock = 0; 
+        forever #10 Clock = ~ Clock; 
+    end 
+    
+    // State machine - update on positive clock edge
+    always @(posedge Clock) begin 
+        case (Present_state) 
+            Default:      Present_state = Reg_load1a; 
+            Reg_load1a:   Present_state = Reg_load1b; 
+            Reg_load1b:   Present_state = Reg_load2a; 
+            Reg_load2a:   Present_state = Reg_load2b; 
+            Reg_load2b:   Present_state = T0; 
+            T0:           Present_state = T1; 
+            T1:           Present_state = T2; 
+            T2:           Present_state = T3; 
+            T3:           Present_state = T4; 
+            T4:           Present_state = T5; 
+            T5:           Present_state = T6; 
+            T6:           Present_state = T0; // Loop back or end simulation
+        endcase 
+    end 
+    
+    // Control signal generation based on current state
+    always @(Present_state) begin 
+        case (Present_state)               
+            Default: begin 
+                // Initialize all signals to 0
+                {PCout, Zlowout, Zhighout, MDRout, R5out, R6out} = 6'b0;
+                {MARin, Zin, PCin, MDRin, IRin, Yin} = 6'b0;
+                {IncPC, Read, MUL, LOin, HIin, R5in, R6in} = 7'b0;
+                Mdatain = 32'h00000000;
+            end 
+            
+            Reg_load1a: begin   // Load R5 with first operand (e.g., 25)
+                Mdatain = 32'h00000019;  // 25 decimal
+                Read = 1; 
+                MDRin = 1;              
+            end 
+            
+            Reg_load1b: begin   // Transfer from MDR to R5
+                MDRout = 1; 
+                R5in = 1;     
+            end 
+            
+            Reg_load2a: begin   // Load R6 with second operand (e.g., 10)
+                Mdatain = 32'h0000000A;  // 10 decimal
+                Read = 1; 
+                MDRin = 1;   
+            end 
+            
+            Reg_load2b: begin   // Transfer from MDR to R6
+                MDRout = 1; 
+                R6in = 1;   
+            end 
+            
+            T0: begin   // Fetch: PC -> MAR, PC+1 -> Z
+                PCout = 1; 
+                MARin = 1; 
+                IncPC = 1; 
+                Zin = 1;   
+            end 
+            
+            T1: begin   // Fetch: Z -> PC, Read memory, Mdatain = instruction
+                Zlowout = 1; 
+                PCin = 1; 
+                Read = 1; 
+                MDRin = 1;   
+                Mdatain = 32'h116B0000;  // mul R5, R6 opcode (example)
+            end 
+            
+            T2: begin   // Fetch: MDR -> IR
+                MDRout = 1; 
+                IRin = 1;    
+            end 
+            
+            T3: begin   // Execute: R5 -> Y
+                R5out = 1; 
+                Yin = 1;    
+            end 
+            
+            T4: begin   // Execute: R6 * Y -> Z
+                R6out = 1; 
+                MUL = 1;    // MUL operation
+                Zin = 1;    // Store result in Z
+            end 
+            
+            T5: begin   // Writeback: Zlow -> LO
+                Zlowout = 1; 
+                LOin = 1;   
+            end 
+            
+            T6: begin   // Writeback: Zhigh -> HI
+                Zhighout = 1; 
+                HIin = 1;   
+            end 
+            
+        endcase 
+    end 
+    
+endmodule

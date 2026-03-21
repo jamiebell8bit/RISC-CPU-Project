@@ -1,0 +1,278 @@
+m255
+K4
+z2
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 dC:/Users/jimbo/projects/ELEC 374 project/CPU_Project/simulation/modelsim
+vadder32
+Z1 !s110 1772554511
+!i10b 1
+!s100 aVfeV7MR;[Jjn]GF^Z5a52
+ILf4D3zehg9?k>E_=WZGBP2
+Z2 VDg1SIo80bB@j0V0VzS_@n1
+R0
+w1771735205
+8C:/Users/jimbo/projects/ELEC 374 project/CPU_Project/adder32.v
+FC:/Users/jimbo/projects/ELEC 374 project/CPU_Project/adder32.v
+L0 4
+Z3 OV;L;10.5b;63
+r1
+!s85 0
+31
+Z4 !s108 1772554511.000000
+!s107 C:/Users/jimbo/projects/ELEC 374 project/CPU_Project/adder32.v|
+!s90 -reportprogress|300|-vlog01compat|-work|work|+incdir+C:/Users/jimbo/projects/ELEC 374 project/CPU_Project|C:/Users/jimbo/projects/ELEC 374 project/CPU_Project/adder32.v|
+!i113 1
+Z5 o-vlog01compat -work work
+Z6 !s92 -vlog01compat -work work {+incdir+C:/Users/jimbo/projects/ELEC 374 project/CPU_Project}
+Z7 tCvgOpt 0
+valu
+Z8 !s110 1772554513
+!i10b 1
+!s100 OoagiW;2F0A7`aF7AKTzl0
+IG?<A>PNcCQ5C:^1OI3omg1
+R2
+R0
+w1772552335
+8C:/Users/jimbo/projects/ELEC 374 project/CPU_Project/alu.v
+FC:/Users/jimbo/projects/ELEC 374 project/CPU_Project/alu.v
+L0 4
+R3
+r1
+!s85 0
+31
+Z9 !s108 1772554512.000000
+!s107 C:/Users/jimbo/projects/ELEC 374 project/CPU_Project/alu.v|
+!s90 -reportprogress|300|-vlog01compat|-work|work|+incdir+C:/Users/jimbo/projects/ELEC 374 project/CPU_Project|C:/Users/jimbo/projects/ELEC 374 project/CPU_Project/alu.v|
+!i113 1
+R5
+R6
+R7
+vBus
+Z10 !s110 1772554512
+!i10b 1
+!s100 ^^Y:[3IPYS>Z@i:DcWBL[0
+IziWf9?E28VJEj5VCkWQCe3
+R2
+R0
+w1771940707
+8C:/Users/jimbo/projects/ELEC 374 project/CPU_Project/bus.v
+FC:/Users/jimbo/projects/ELEC 374 project/CPU_Project/bus.v
+L0 7
+R3
+r1
+!s85 0
+31
+R9
+!s107 C:/Users/jimbo/projects/ELEC 374 project/CPU_Project/bus.v|
+!s90 -reportprogress|300|-vlog01compat|-work|work|+incdir+C:/Users/jimbo/projects/ELEC 374 project/CPU_Project|C:/Users/jimbo/projects/ELEC 374 project/CPU_Project/bus.v|
+!i113 1
+R5
+R6
+R7
+n@bus
+vdatapath
+R10
+!i10b 1
+!s100 O1gmI;K2>z<FW1T1>lU:<1
+I59>zM]l1cKASjbd[DJI>]3
+R2
+R0
+w1772551225
+8C:/Users/jimbo/projects/ELEC 374 project/CPU_Project/datapath.v
+FC:/Users/jimbo/projects/ELEC 374 project/CPU_Project/datapath.v
+L0 3
+R3
+r1
+!s85 0
+31
+R9
+!s107 C:/Users/jimbo/projects/ELEC 374 project/CPU_Project/datapath.v|
+!s90 -reportprogress|300|-vlog01compat|-work|work|+incdir+C:/Users/jimbo/projects/ELEC 374 project/CPU_Project|C:/Users/jimbo/projects/ELEC 374 project/CPU_Project/datapath.v|
+!i113 1
+R5
+R6
+R7
+vdatapath_div_tb
+R8
+!i10b 1
+!s100 lD29FW8Lh[8>C;MlLL?TD2
+I<elo?4557@cZh@CaBfi];0
+R2
+R0
+w1772554490
+8C:/Users/jimbo/projects/ELEC 374 project/CPU_Project/div_tb.v
+FC:/Users/jimbo/projects/ELEC 374 project/CPU_Project/div_tb.v
+L0 6
+R3
+r1
+!s85 0
+31
+!s108 1772554513.000000
+!s107 C:/Users/jimbo/projects/ELEC 374 project/CPU_Project/div_tb.v|
+!s90 -reportprogress|300|-vlog01compat|-work|work|+incdir+C:/Users/jimbo/projects/ELEC 374 project/CPU_Project|C:/Users/jimbo/projects/ELEC 374 project/CPU_Project/div_tb.v|
+!i113 1
+R5
+R6
+R7
+vdiv
+R10
+!i10b 1
+!s100 :o;JgOD]d[CJ:JSD=Zoh93
+IYNOXP:[jjL1H5@V1J4@9_1
+R2
+R0
+w1772551855
+8C:/Users/jimbo/projects/ELEC 374 project/CPU_Project/div.v
+FC:/Users/jimbo/projects/ELEC 374 project/CPU_Project/div.v
+L0 4
+R3
+r1
+!s85 0
+31
+R9
+!s107 C:/Users/jimbo/projects/ELEC 374 project/CPU_Project/div.v|
+!s90 -reportprogress|300|-vlog01compat|-work|work|+incdir+C:/Users/jimbo/projects/ELEC 374 project/CPU_Project|C:/Users/jimbo/projects/ELEC 374 project/CPU_Project/div.v|
+!i113 1
+R5
+R6
+R7
+vIR
+R10
+!i10b 1
+!s100 Fd;N@@^kKPRnzFmUS1cF53
+I>_M81[jQaV5^:4?SPCgd03
+R2
+R0
+w1770622594
+8C:/Users/jimbo/projects/ELEC 374 project/CPU_Project/ir.v
+FC:/Users/jimbo/projects/ELEC 374 project/CPU_Project/ir.v
+L0 4
+R3
+r1
+!s85 0
+31
+R9
+!s107 C:/Users/jimbo/projects/ELEC 374 project/CPU_Project/ir.v|
+!s90 -reportprogress|300|-vlog01compat|-work|work|+incdir+C:/Users/jimbo/projects/ELEC 374 project/CPU_Project|C:/Users/jimbo/projects/ELEC 374 project/CPU_Project/ir.v|
+!i113 1
+R5
+R6
+R7
+n@i@r
+vMAR
+R10
+!i10b 1
+!s100 G8zTzE7eUib_2BXYL<8[@1
+I8T=9=g01bSkLi:BjcVBZ82
+R2
+R0
+w1770513173
+8C:/Users/jimbo/projects/ELEC 374 project/CPU_Project/mar.v
+FC:/Users/jimbo/projects/ELEC 374 project/CPU_Project/mar.v
+L0 4
+R3
+r1
+!s85 0
+31
+R4
+!s107 C:/Users/jimbo/projects/ELEC 374 project/CPU_Project/mar.v|
+!s90 -reportprogress|300|-vlog01compat|-work|work|+incdir+C:/Users/jimbo/projects/ELEC 374 project/CPU_Project|C:/Users/jimbo/projects/ELEC 374 project/CPU_Project/mar.v|
+!i113 1
+R5
+R6
+R7
+n@m@a@r
+vMDR
+R1
+!i10b 1
+!s100 1jehm@XF@@a[^0VDaW;;73
+Iz6F5>TLS^mG1fFCKC3ihd0
+R2
+R0
+w1770506892
+8C:/Users/jimbo/projects/ELEC 374 project/CPU_Project/mdr.v
+FC:/Users/jimbo/projects/ELEC 374 project/CPU_Project/mdr.v
+L0 4
+R3
+r1
+!s85 0
+31
+R4
+!s107 C:/Users/jimbo/projects/ELEC 374 project/CPU_Project/mdr.v|
+!s90 -reportprogress|300|-vlog01compat|-work|work|+incdir+C:/Users/jimbo/projects/ELEC 374 project/CPU_Project|C:/Users/jimbo/projects/ELEC 374 project/CPU_Project/mdr.v|
+!i113 1
+R5
+R6
+R7
+n@m@d@r
+vmul
+R1
+!i10b 1
+!s100 ;^]2:]<U9CzGf2da6Xa=@3
+IM=eic@XFheVRJ5gM[>jUV0
+R2
+R0
+w1771934983
+8C:/Users/jimbo/projects/ELEC 374 project/CPU_Project/mul.v
+FC:/Users/jimbo/projects/ELEC 374 project/CPU_Project/mul.v
+L0 5
+R3
+r1
+!s85 0
+31
+R4
+!s107 C:/Users/jimbo/projects/ELEC 374 project/CPU_Project/mul.v|
+!s90 -reportprogress|300|-vlog01compat|-work|work|+incdir+C:/Users/jimbo/projects/ELEC 374 project/CPU_Project|C:/Users/jimbo/projects/ELEC 374 project/CPU_Project/mul.v|
+!i113 1
+R5
+R6
+R7
+vregister
+R1
+!i10b 1
+!s100 5Dc:z=iYc8diiDQYaflI^1
+ISCSfMQX:o6nD[IB8CCm=U2
+R2
+R0
+w1770674429
+8C:/Users/jimbo/projects/ELEC 374 project/CPU_Project/register.v
+FC:/Users/jimbo/projects/ELEC 374 project/CPU_Project/register.v
+L0 4
+R3
+r1
+!s85 0
+31
+R4
+!s107 C:/Users/jimbo/projects/ELEC 374 project/CPU_Project/register.v|
+!s90 -reportprogress|300|-vlog01compat|-work|work|+incdir+C:/Users/jimbo/projects/ELEC 374 project/CPU_Project|C:/Users/jimbo/projects/ELEC 374 project/CPU_Project/register.v|
+!i113 1
+R5
+R6
+R7
+vregister64
+R1
+!i10b 1
+!s100 <ez[Ocd=?lU9_APK[i_?i1
+I_VoPFbBbMUKkBYS229c_61
+R2
+R0
+w1771732488
+8C:/Users/jimbo/projects/ELEC 374 project/CPU_Project/register64.v
+FC:/Users/jimbo/projects/ELEC 374 project/CPU_Project/register64.v
+L0 4
+R3
+r1
+!s85 0
+31
+R4
+!s107 C:/Users/jimbo/projects/ELEC 374 project/CPU_Project/register64.v|
+!s90 -reportprogress|300|-vlog01compat|-work|work|+incdir+C:/Users/jimbo/projects/ELEC 374 project/CPU_Project|C:/Users/jimbo/projects/ELEC 374 project/CPU_Project/register64.v|
+!i113 1
+R5
+R6
+R7
