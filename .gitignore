@@ -1,0 +1,17 @@
+# Quartus junk
+db/
+incremental_db/
+output_files/
+simulation/
+*.rpt
+*.summary
+*.smsg
+*.qws
+*.jdi
+*.bak
+*.log
+
+# ModelSim junk
+vsim.wlf
+transcript
+work/
