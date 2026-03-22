@@ -1,5 +1,19 @@
 `timescale 1ns/10ps
 
+// Datapath code
+// Group: 22
+//
+// Phase 2 plumbing version.
+// Adds:
+// - RAM memory block
+// - full MAR / MDR memory path
+// - In.Port and Out.Port
+// - bus support for InPortout and Cout
+//
+// Note:
+// Gra/Grb/Grc, BAout, CON FF, revised R0, and other Phase 2 control logic
+// are not done yet
+
 module datapath (
     // General register controls
     input  [15:0] Rin,
@@ -22,14 +36,26 @@ module datapath (
     input Zhighout,
     input Zlowout,
 
+    // Phase 2 I/O controls
+    input InPortout,
+    input OutPortin,
+    input Cout,
+
     // Other controls
     input IncPC,
     input Read,
+    input Write,
     input [4:0] opcode,
 
-    // Clock + external mem data
+    // Clock + external input
     input Clock,
-    input [31:0] Mdatain
+    input [31:0] Mdatain,
+    input [31:0] InPortData,
+
+    // Helpful observable outputs for debugging / demo
+    output [31:0] OutPortData,
+    output [31:0] MARData,
+    output [31:0] RAMDataOut
 );
 
     // Internal reset (simulation convenience)
@@ -67,24 +93,58 @@ module datapath (
 
     // Special regs
     wire [31:0] IR_q;
-    wire [8:0]  MAR_addr;
+    wire [31:0] MAR_q;
     wire [31:0] MDR_q;
     wire [31:0] HI_q, LO_q;
     wire [31:0] Y_q;
     wire [63:0] Z_q;
+    wire [31:0] InPort_q;
 
     // PC as a normal register (loads via PCin)
     wire [31:0] PC_q;
     register #(32,32,32'h0) PC (clear_int, Clock, PCin, BusMuxOut, PC_q);
 
     IR  IR0  (clear_int, Clock, IRin,  BusMuxOut, IR_q);
-    MAR MAR0 (clear_int, Clock, MARin, BusMuxOut, MAR_addr);
-    MDR MDR0 (clear_int, Clock, MDRin, Read, BusMuxOut, Mdatain, MDR_q);
+    MAR MAR0 (clear_int, Clock, MARin, BusMuxOut, MAR_q);
+
+    // Memory subsystem
+    wire [31:0] RAM_q;
+    RAM RAM0 (
+        .clock(Clock),
+        .Read(Read),
+        .Write(Write),
+        .Address(MAR_q[8:0]),
+        .DataIn(MDR_q),
+        .DataOut(RAM_q)
+    );
+
+    // For Phase 2, memory data should come from RAM.
+    // Mdatain is kept here for convenience / transition from Phase 1.
+    // If Mdatain is non-zero during a read cycle, it overrides RAM_q.
+    wire [31:0] MDR_mem_input;
+    assign MDR_mem_input = (Mdatain != 32'b0) ? Mdatain : RAM_q;
+
+    MDR MDR0 (clear_int, Clock, MDRin, Read, BusMuxOut, MDR_mem_input, MDR_q);
 
     register #(32,32,32'h0) HI (clear_int, Clock, HIin, BusMuxOut, HI_q);
     register #(32,32,32'h0) LO (clear_int, Clock, LOin, BusMuxOut, LO_q);
-
     register #(32,32,32'h0) Y  (clear_int, Clock, Yin,  BusMuxOut, Y_q);
+
+    // Phase 2 I/O ports
+    InPort INPORT0 (
+        .clear(clear_int),
+        .clock(Clock),
+        .ExternalInput(InPortData),
+        .BusMuxIn_InPort(InPort_q)
+    );
+
+    OutPort OUTPORT0 (
+        .clear(clear_int),
+        .clock(Clock),
+        .OutPortin(OutPortin),
+        .BusMuxOut(BusMuxOut),
+        .OutPortData(OutPortData)
+    );
 
     // ALU output
     wire [63:0] ALU_Z;
@@ -119,6 +179,10 @@ module datapath (
     wire [31:0] Zhigh = Z_q[63:32];
     wire [31:0] Zlow  = Z_q[31:0];
 
+    // Sign-extended constant C from IR[17:0]
+    wire [31:0] C_sign_extended;
+    assign C_sign_extended = {{14{IR_q[18]}}, IR_q[17:0]};
+
     // Bus
     Bus BUS0 (
         R0_q, R1_q, R2_q, R3_q,
@@ -133,6 +197,8 @@ module datapath (
         LO_q,
         Zhigh,
         Zlow,
+        InPort_q,
+        C_sign_extended,
 
         Rout[0], Rout[1], Rout[2], Rout[3],
         Rout[4], Rout[5], Rout[6], Rout[7],
@@ -146,8 +212,13 @@ module datapath (
         LOout,
         Zhighout,
         Zlowout,
+        InPortout,
+        Cout,
 
         BusMuxOut
     );
+
+    assign MARData   = MAR_q;
+    assign RAMDataOut = RAM_q;
 
 endmodule

@@ -1,5 +1,5 @@
 Flow report for CPU
-Tue Mar 03 11:15:00 2026
+Sat Mar 21 19:58:48 2026
 Quartus Prime Version 18.1.0 Build 625 09/12/2018 SJ Lite Edition
 
 
@@ -37,24 +37,29 @@ refer to the applicable agreement for further details.
 
 
 
-+---------------------------------------------------------------------------+
-; Flow Summary                                                              ;
-+-----------------------------+---------------------------------------------+
-; Flow Status                 ; Successful - Tue Mar 03 11:15:00 2026       ;
-; Quartus Prime Version       ; 18.1.0 Build 625 09/12/2018 SJ Lite Edition ;
-; Revision Name               ; CPU                                         ;
-; Top-level Entity Name       ; datapath                                    ;
-; Family                      ; Cyclone V                                   ;
-; Device                      ; 5CEBA4F23C7                                 ;
-; Timing Models               ; Final                                       ;
-; Logic utilization (in ALMs) ; N/A until Partition Merge                   ;
-; Total registers             ; N/A until Partition Merge                   ;
-; Total pins                  ; N/A until Partition Merge                   ;
-; Total virtual pins          ; N/A until Partition Merge                   ;
-; Total block memory bits     ; N/A until Partition Merge                   ;
-; Total PLLs                  ; N/A until Partition Merge                   ;
-; Total DLLs                  ; N/A until Partition Merge                   ;
-+-----------------------------+---------------------------------------------+
++-------------------------------------------------------------------------------+
+; Flow Summary                                                                  ;
++---------------------------------+---------------------------------------------+
+; Flow Status                     ; Successful - Sat Mar 21 19:58:48 2026       ;
+; Quartus Prime Version           ; 18.1.0 Build 625 09/12/2018 SJ Lite Edition ;
+; Revision Name                   ; CPU                                         ;
+; Top-level Entity Name           ; datapath                                    ;
+; Family                          ; Cyclone V                                   ;
+; Device                          ; 5CEBA4F23C7                                 ;
+; Timing Models                   ; Final                                       ;
+; Logic utilization (in ALMs)     ; N/A                                         ;
+; Total registers                 ; 947                                         ;
+; Total pins                      ; 219                                         ;
+; Total virtual pins              ; 0                                           ;
+; Total block memory bits         ; 16,384                                      ;
+; Total DSP Blocks                ; 0                                           ;
+; Total HSSI RX PCSs              ; 0                                           ;
+; Total HSSI PMA RX Deserializers ; 0                                           ;
+; Total HSSI TX PCSs              ; 0                                           ;
+; Total HSSI PMA TX Serializers   ; 0                                           ;
+; Total PLLs                      ; 0                                           ;
+; Total DLLs                      ; 0                                           ;
++---------------------------------+---------------------------------------------+
 
 
 +-----------------------------------------+
@@ -62,7 +67,7 @@ refer to the applicable agreement for further details.
 +-------------------+---------------------+
 ; Option            ; Setting             ;
 +-------------------+---------------------+
-; Start date & time ; 03/03/2026 11:14:51 ;
+; Start date & time ; 03/21/2026 19:58:00 ;
 ; Main task         ; Compilation         ;
 ; Revision Name     ; CPU                 ;
 +-------------------+---------------------+
@@ -73,9 +78,10 @@ refer to the applicable agreement for further details.
 +--------------------------------------+----------------------------------------+---------------+-------------+----------------+
 ; Assignment Name                      ; Value                                  ; Default Value ; Entity Name ; Section Id     ;
 +--------------------------------------+----------------------------------------+---------------+-------------+----------------+
-; COMPILER_SIGNATURE_ID                ; 193662137699048.177255449106396        ; --            ; --          ; --             ;
+; COMPILER_SIGNATURE_ID                ; 38917505025.177413748026896            ; --            ; --          ; --             ;
 ; EDA_DESIGN_INSTANCE_NAME             ; NA                                     ; --            ; --          ; shra           ;
 ; EDA_DESIGN_INSTANCE_NAME             ; NA                                     ; --            ; --          ; neg            ;
+; EDA_DESIGN_INSTANCE_NAME             ; NA                                     ; --            ; --          ; phase2         ;
 ; EDA_DESIGN_INSTANCE_NAME             ; NA                                     ; --            ; --          ; ror            ;
 ; EDA_DESIGN_INSTANCE_NAME             ; NA                                     ; --            ; --          ; div            ;
 ; EDA_DESIGN_INSTANCE_NAME             ; NA                                     ; --            ; --          ; sub            ;
@@ -87,12 +93,13 @@ refer to the applicable agreement for further details.
 ; EDA_DESIGN_INSTANCE_NAME             ; NA                                     ; --            ; --          ; not            ;
 ; EDA_DESIGN_INSTANCE_NAME             ; NA                                     ; --            ; --          ; or             ;
 ; EDA_DESIGN_INSTANCE_NAME             ; NA                                     ; --            ; --          ; add            ;
-; EDA_NATIVELINK_SIMULATION_TEST_BENCH ; div                                    ; --            ; --          ; eda_simulation ;
+; EDA_NATIVELINK_SIMULATION_TEST_BENCH ; phase2                                 ; --            ; --          ; eda_simulation ;
 ; EDA_OUTPUT_DATA_FORMAT               ; Verilog Hdl                            ; --            ; --          ; eda_simulation ;
 ; EDA_SIMULATION_TOOL                  ; ModelSim-Altera (Verilog)              ; <None>        ; --          ; --             ;
 ; EDA_TEST_BENCH_ENABLE_STATUS         ; TEST_BENCH_MODE                        ; --            ; --          ; eda_simulation ;
 ; EDA_TEST_BENCH_FILE                  ; shra_tb.v                              ; --            ; --          ; shra           ;
 ; EDA_TEST_BENCH_FILE                  ; neg_tb.v                               ; --            ; --          ; neg            ;
+; EDA_TEST_BENCH_FILE                  ; phase2_plumbing_tb.v                   ; --            ; --          ; phase2         ;
 ; EDA_TEST_BENCH_FILE                  ; ror_tb.v                               ; --            ; --          ; ror            ;
 ; EDA_TEST_BENCH_FILE                  ; div_tb.v                               ; --            ; --          ; div            ;
 ; EDA_TEST_BENCH_FILE                  ; sub_tb.v                               ; --            ; --          ; sub            ;
@@ -106,6 +113,7 @@ refer to the applicable agreement for further details.
 ; EDA_TEST_BENCH_FILE                  ; add_tb.v                               ; --            ; --          ; add            ;
 ; EDA_TEST_BENCH_MODULE_NAME           ; datapath_shra_tb                       ; --            ; --          ; shra           ;
 ; EDA_TEST_BENCH_MODULE_NAME           ; datapath_neg_tb                        ; --            ; --          ; neg            ;
+; EDA_TEST_BENCH_MODULE_NAME           ; phase2_plumbing_tb                     ; --            ; --          ; phase2         ;
 ; EDA_TEST_BENCH_MODULE_NAME           ; datapath_ror_tb                        ; --            ; --          ; ror            ;
 ; EDA_TEST_BENCH_MODULE_NAME           ; datapath_div_tb                        ; --            ; --          ; div            ;
 ; EDA_TEST_BENCH_MODULE_NAME           ; datapath_sub_tb                        ; --            ; --          ; sub            ;
@@ -130,6 +138,7 @@ refer to the applicable agreement for further details.
 ; EDA_TEST_BENCH_NAME                  ; rol                                    ; --            ; --          ; eda_simulation ;
 ; EDA_TEST_BENCH_NAME                  ; or                                     ; --            ; --          ; eda_simulation ;
 ; EDA_TEST_BENCH_NAME                  ; neg                                    ; --            ; --          ; eda_simulation ;
+; EDA_TEST_BENCH_NAME                  ; phase2                                 ; --            ; --          ; eda_simulation ;
 ; EDA_TEST_BENCH_RUN_SIM_FOR           ; 500 ns                                 ; --            ; --          ; shra           ;
 ; EDA_TEST_BENCH_RUN_SIM_FOR           ; 500 ns                                 ; --            ; --          ; neg            ;
 ; EDA_TEST_BENCH_RUN_SIM_FOR           ; 500 ns                                 ; --            ; --          ; ror            ;
@@ -155,29 +164,29 @@ refer to the applicable agreement for further details.
 +--------------------------------------+----------------------------------------+---------------+-------------+----------------+
 
 
-+----------------------------------------------------------------------------------------------------------------------------+
-; Flow Elapsed Time                                                                                                          ;
-+------------------------+--------------+-------------------------+---------------------+------------------------------------+
-; Module Name            ; Elapsed Time ; Average Processors Used ; Peak Virtual Memory ; Total CPU Time (on all processors) ;
-+------------------------+--------------+-------------------------+---------------------+------------------------------------+
-; Analysis & Elaboration ; 00:00:10     ; 1.0                     ; 4798 MB             ; 00:00:18                           ;
-; Total                  ; 00:00:10     ; --                      ; --                  ; 00:00:18                           ;
-+------------------------+--------------+-------------------------+---------------------+------------------------------------+
++--------------------------------------------------------------------------------------------------------------------------+
+; Flow Elapsed Time                                                                                                        ;
++----------------------+--------------+-------------------------+---------------------+------------------------------------+
+; Module Name          ; Elapsed Time ; Average Processors Used ; Peak Virtual Memory ; Total CPU Time (on all processors) ;
++----------------------+--------------+-------------------------+---------------------+------------------------------------+
+; Analysis & Synthesis ; 00:00:48     ; 1.0                     ; 4911 MB             ; 00:00:58                           ;
+; Total                ; 00:00:48     ; --                      ; --                  ; 00:00:58                           ;
++----------------------+--------------+-------------------------+---------------------+------------------------------------+
 
 
-+--------------------------------------------------------------------------------------+
-; Flow OS Summary                                                                      ;
-+------------------------+------------------+------------+------------+----------------+
-; Module Name            ; Machine Hostname ; OS Name    ; OS Version ; Processor type ;
-+------------------------+------------------+------------+------------+----------------+
-; Analysis & Elaboration ; LAPTOP-FE5AIPV2  ; Windows 10 ; 10.0       ; x86_64         ;
-+------------------------+------------------+------------+------------+----------------+
++------------------------------------------------------------------------------------+
+; Flow OS Summary                                                                    ;
++----------------------+------------------+------------+------------+----------------+
+; Module Name          ; Machine Hostname ; OS Name    ; OS Version ; Processor type ;
++----------------------+------------------+------------+------------+----------------+
+; Analysis & Synthesis ; LAPTOP-FE5AIPV2  ; Windows 10 ; 10.0       ; x86_64         ;
++----------------------+------------------+------------+------------+----------------+
 
 
 ------------
 ; Flow Log ;
 ------------
-quartus_map --read_settings_files=on --write_settings_files=off CPU -c CPU --analysis_and_elaboration
+quartus_map --read_settings_files=on --write_settings_files=off CPU -c CPU
 
 
 

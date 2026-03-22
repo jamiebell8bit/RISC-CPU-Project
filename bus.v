@@ -1,8 +1,7 @@
 // Bus Code
 // Group: 22
-//
+// Phase 2 updated
 // Exactly one out control should be asserted at a time.
-
 
 module Bus (
     // Data sources onto the bus
@@ -18,8 +17,9 @@ module Bus (
     input [31:0] LO,
     input [31:0] Zhigh,
     input [31:0] Zlow,
+    input [31:0] InPortData,
+    input [31:0] Csignextended,
 
-    
     input R0out,  input R1out,  input R2out,  input R3out,
     input R4out,  input R5out,  input R6out,  input R7out,
     input R8out,  input R9out,  input R10out, input R11out,
@@ -32,6 +32,8 @@ module Bus (
     input LOout,
     input Zhighout,
     input Zlowout,
+    input InPortout,
+    input Cout,
 
     // Bus output
     output reg [31:0] BusOut
@@ -59,13 +61,15 @@ module Bus (
         else if (R14out) BusOut = R14;
         else if (R15out) BusOut = R15;
 
-        else if (PCout)     BusOut = PC;
-        else if (IRout)     BusOut = IR;
-        else if (MDRout)    BusOut = MDR;
-        else if (HIout)     BusOut = HI;
-        else if (LOout)     BusOut = LO;
-        else if (Zhighout)  BusOut = Zhigh;
-        else if (Zlowout)   BusOut = Zlow;
+        else if (PCout)      BusOut = PC;
+        else if (IRout)      BusOut = IR;
+        else if (MDRout)     BusOut = MDR;
+        else if (HIout)      BusOut = HI;
+        else if (LOout)      BusOut = LO;
+        else if (Zhighout)   BusOut = Zhigh;
+        else if (Zlowout)    BusOut = Zlow;
+        else if (InPortout)  BusOut = InPortData;
+        else if (Cout)       BusOut = Csignextended;
     end
 
 endmodule

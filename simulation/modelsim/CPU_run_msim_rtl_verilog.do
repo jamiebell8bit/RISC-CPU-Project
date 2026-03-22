@@ -5,6 +5,9 @@ if {[file exists rtl_work]} {
 vlib rtl_work
 vmap work rtl_work
 
+vlog -vlog01compat -work work +incdir+C:/Users/jimbo/projects/ELEC\ 374\ project/CPU_Project {C:/Users/jimbo/projects/ELEC 374 project/CPU_Project/ram.v}
+vlog -vlog01compat -work work +incdir+C:/Users/jimbo/projects/ELEC\ 374\ project/CPU_Project {C:/Users/jimbo/projects/ELEC 374 project/CPU_Project/out_port.v}
+vlog -vlog01compat -work work +incdir+C:/Users/jimbo/projects/ELEC\ 374\ project/CPU_Project {C:/Users/jimbo/projects/ELEC 374 project/CPU_Project/in_port.v}
 vlog -vlog01compat -work work +incdir+C:/Users/jimbo/projects/ELEC\ 374\ project/CPU_Project {C:/Users/jimbo/projects/ELEC 374 project/CPU_Project/mul.v}
 vlog -vlog01compat -work work +incdir+C:/Users/jimbo/projects/ELEC\ 374\ project/CPU_Project {C:/Users/jimbo/projects/ELEC 374 project/CPU_Project/adder32.v}
 vlog -vlog01compat -work work +incdir+C:/Users/jimbo/projects/ELEC\ 374\ project/CPU_Project {C:/Users/jimbo/projects/ELEC 374 project/CPU_Project/register64.v}
@@ -17,11 +20,11 @@ vlog -vlog01compat -work work +incdir+C:/Users/jimbo/projects/ELEC\ 374\ project
 vlog -vlog01compat -work work +incdir+C:/Users/jimbo/projects/ELEC\ 374\ project/CPU_Project {C:/Users/jimbo/projects/ELEC 374 project/CPU_Project/bus.v}
 vlog -vlog01compat -work work +incdir+C:/Users/jimbo/projects/ELEC\ 374\ project/CPU_Project {C:/Users/jimbo/projects/ELEC 374 project/CPU_Project/alu.v}
 
-vlog -vlog01compat -work work +incdir+C:/Users/jimbo/projects/ELEC\ 374\ project/CPU_Project {C:/Users/jimbo/projects/ELEC 374 project/CPU_Project/div_tb.v}
+vlog -vlog01compat -work work +incdir+C:/Users/jimbo/projects/ELEC\ 374\ project/CPU_Project {C:/Users/jimbo/projects/ELEC 374 project/CPU_Project/phase2_plumbing_tb.v}
 
-vsim -t 1ps -L altera_ver -L lpm_ver -L sgate_ver -L altera_mf_ver -L altera_lnsim_ver -L cyclonev_ver -L cyclonev_hssi_ver -L cyclonev_pcie_hip_ver -L rtl_work -L work -voptargs="+acc"  datapath_div_tb
+vsim -t 1ps -L altera_ver -L lpm_ver -L sgate_ver -L altera_mf_ver -L altera_lnsim_ver -L cyclonev_ver -L cyclonev_hssi_ver -L cyclonev_pcie_hip_ver -L rtl_work -L work -voptargs="+acc"  phase2_plumbing_tb
 
 add wave *
 view structure
 view signals
-run 500 ns
+run -all
