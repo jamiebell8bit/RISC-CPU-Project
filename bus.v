@@ -1,7 +1,6 @@
 // Bus Code
 // Group: 22
 // Phase 2 updated
-// Exactly one out control should be asserted at a time.
 
 module Bus (
     // Data sources onto the bus

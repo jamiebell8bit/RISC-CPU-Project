@@ -9,15 +9,21 @@
 // - full MAR / MDR memory path
 // - In.Port and Out.Port
 // - bus support for InPortout and Cout
-//
-// Note:
-// Gra/Grb/Grc, BAout, CON FF, revised R0, and other Phase 2 control logic
-// are not done yet
+// - Gra, Grb, Grc suppoort
+// - BAout and R0 revision 
+// - CON FF
+// - Revised R0
 
 module datapath (
     // General register controls
     input  [15:0] Rin,
     input  [15:0] Rout,
+
+    //// Added missing inputs
+    input Gra, Grb, Grc,
+    input BAout,
+    input CONin,
+    output reg CON,
 
     // Bus / special register controls
     input PCout,
@@ -74,24 +80,57 @@ module datapath (
     wire [31:0] R8_q,  R9_q,  R10_q, R11_q;
     wire [31:0] R12_q, R13_q, R14_q, R15_q;
 
-    register #(32,32,32'h0) R0  (clear_int, Clock, Rin[0],  BusMuxOut, R0_q);
-    register #(32,32,32'h0) R1  (clear_int, Clock, Rin[1],  BusMuxOut, R1_q);
-    register #(32,32,32'h0) R2  (clear_int, Clock, Rin[2],  BusMuxOut, R2_q);
-    register #(32,32,32'h0) R3  (clear_int, Clock, Rin[3],  BusMuxOut, R3_q);
-    register #(32,32,32'h0) R4  (clear_int, Clock, Rin[4],  BusMuxOut, R4_q);
-    register #(32,32,32'h0) R5  (clear_int, Clock, Rin[5],  BusMuxOut, R5_q);
-    register #(32,32,32'h0) R6  (clear_int, Clock, Rin[6],  BusMuxOut, R6_q);
-    register #(32,32,32'h0) R7  (clear_int, Clock, Rin[7],  BusMuxOut, R7_q);
-    register #(32,32,32'h0) R8  (clear_int, Clock, Rin[8],  BusMuxOut, R8_q);
-    register #(32,32,32'h0) R9  (clear_int, Clock, Rin[9],  BusMuxOut, R9_q);
-    register #(32,32,32'h0) R10 (clear_int, Clock, Rin[10], BusMuxOut, R10_q);
-    register #(32,32,32'h0) R11 (clear_int, Clock, Rin[11], BusMuxOut, R11_q);
-    register #(32,32,32'h0) R12 (clear_int, Clock, Rin[12], BusMuxOut, R12_q);
-    register #(32,32,32'h0) R13 (clear_int, Clock, Rin[13], BusMuxOut, R13_q);
-    register #(32,32,32'h0) R14 (clear_int, Clock, Rin[14], BusMuxOut, R14_q);
-    register #(32,32,32'h0) R15 (clear_int, Clock, Rin[15], BusMuxOut, R15_q);
+    //// Select & Decode ////
 
-    // Special regs
+    wire [3:0] Ra = IR_q[26:23];
+    wire [3:0] Rb = IR_q[22:19];
+    wire [3:0] Rc = IR_q[18:15];
+
+    reg [3:0] Sel;
+
+    always @(*) begin
+        if (Gra) Sel = Ra;
+        else if (Grb) Sel = Rb;
+        else if (Grc) Sel = Rc;
+        else Sel = 4'b0000;
+    end
+
+    reg [15:0] Rin_decoded, Rout_decoded;
+
+    always @(*) begin
+        Rin_decoded  = 16'b0;
+        Rout_decoded = 16'b0;
+
+        if (|Rin)   Rin_decoded[Sel]  = 1'b1;
+        if (|Rout)  Rout_decoded[Sel] = 1'b1;
+    end
+
+    //// Registers ////
+
+    register #(32,32,32'h0) R0  (clear_int, Clock, Rin_decoded[0],  BusMuxOut, R0_q);
+    register #(32,32,32'h0) R1  (clear_int, Clock, Rin_decoded[1],  BusMuxOut, R1_q);
+    register #(32,32,32'h0) R2  (clear_int, Clock, Rin_decoded[2],  BusMuxOut, R2_q);
+    register #(32,32,32'h0) R3  (clear_int, Clock, Rin_decoded[3],  BusMuxOut, R3_q);
+    register #(32,32,32'h0) R4  (clear_int, Clock, Rin_decoded[4],  BusMuxOut, R4_q);
+    register #(32,32,32'h0) R5  (clear_int, Clock, Rin_decoded[5],  BusMuxOut, R5_q);
+    register #(32,32,32'h0) R6  (clear_int, Clock, Rin_decoded[6],  BusMuxOut, R6_q);
+    register #(32,32,32'h0) R7  (clear_int, Clock, Rin_decoded[7],  BusMuxOut, R7_q);
+    register #(32,32,32'h0) R8  (clear_int, Clock, Rin_decoded[8],  BusMuxOut, R8_q);
+    register #(32,32,32'h0) R9  (clear_int, Clock, Rin_decoded[9],  BusMuxOut, R9_q);
+    register #(32,32,32'h0) R10 (clear_int, Clock, Rin_decoded[10], BusMuxOut, R10_q);
+    register #(32,32,32'h0) R11 (clear_int, Clock, Rin_decoded[11], BusMuxOut, R11_q);
+    register #(32,32,32'h0) R12 (clear_int, Clock, Rin_decoded[12], BusMuxOut, R12_q);
+    register #(32,32,32'h0) R13 (clear_int, Clock, Rin_decoded[13], BusMuxOut, R13_q);
+    register #(32,32,32'h0) R14 (clear_int, Clock, Rin_decoded[14], BusMuxOut, R14_q);
+    register #(32,32,32'h0) R15 (clear_int, Clock, Rin_decoded[15], BusMuxOut, R15_q);
+
+    //// R0 Revision (BAout) ////
+
+    wire [31:0] R0_modified;
+    assign R0_modified = (BAout && Rout_decoded[0]) ? 32'b0 : R0_q;
+
+    //// Special Reg ////
+
     wire [31:0] IR_q;
     wire [31:0] MAR_q;
     wire [31:0] MDR_q;
@@ -100,14 +139,14 @@ module datapath (
     wire [63:0] Z_q;
     wire [31:0] InPort_q;
 
-    // PC as a normal register (loads via PCin)
+    //// PC as a normal register (loads via PCin) ////
     wire [31:0] PC_q;
     register #(32,32,32'h0) PC (clear_int, Clock, PCin, BusMuxOut, PC_q);
 
     IR  IR0  (clear_int, Clock, IRin,  BusMuxOut, IR_q);
     MAR MAR0 (clear_int, Clock, MARin, BusMuxOut, MAR_q);
 
-    // Memory subsystem
+    ////  Memory subsystem ////
     wire [31:0] RAM_q;
     RAM RAM0 (
         .clock(Clock),
@@ -118,9 +157,6 @@ module datapath (
         .DataOut(RAM_q)
     );
 
-    // For Phase 2, memory data should come from RAM.
-    // Mdatain is kept here for convenience / transition from Phase 1.
-    // If Mdatain is non-zero during a read cycle, it overrides RAM_q.
     wire [31:0] MDR_mem_input;
     assign MDR_mem_input = (Mdatain != 32'b0) ? Mdatain : RAM_q;
 
@@ -130,23 +166,24 @@ module datapath (
     register #(32,32,32'h0) LO (clear_int, Clock, LOin, BusMuxOut, LO_q);
     register #(32,32,32'h0) Y  (clear_int, Clock, Yin,  BusMuxOut, Y_q);
 
-    // Phase 2 I/O ports
-    InPort INPORT0 (
-        .clear(clear_int),
-        .clock(Clock),
-        .ExternalInput(InPortData),
-        .BusMuxIn_InPort(InPort_q)
-    );
+    //// Con FF ////
 
-    OutPort OUTPORT0 (
-        .clear(clear_int),
-        .clock(Clock),
-        .OutPortin(OutPortin),
-        .BusMuxOut(BusMuxOut),
-        .OutPortData(OutPortData)
-    );
+    wire [1:0] cond = IR_q[20:19];
+    wire CON_next;
 
-    // ALU output
+    assign CON_next =
+        (cond == 2'b00) ? (BusMuxOut == 0) :
+        (cond == 2'b01) ? (BusMuxOut != 0) :
+        (cond == 2'b10) ? (~BusMuxOut[31] && BusMuxOut != 0) :
+                          (BusMuxOut[31]);
+
+    always @(posedge Clock) begin
+        if (CONin)
+            CON <= CON_next;
+    end
+
+    //// ALU + Z ////
+
     wire [63:0] ALU_Z;
     alu ALU0 (
         .A(Y_q),
@@ -155,7 +192,6 @@ module datapath (
         .Z(ALU_Z)
     );
 
-    // PC+1 for fetch staging into Z
     wire [31:0] pc_plus_one;
     wire pc_cout;
     adder32 PCINC (
@@ -179,13 +215,13 @@ module datapath (
     wire [31:0] Zhigh = Z_q[63:32];
     wire [31:0] Zlow  = Z_q[31:0];
 
-    // Sign-extended constant C from IR[17:0]
     wire [31:0] C_sign_extended;
     assign C_sign_extended = {{14{IR_q[18]}}, IR_q[17:0]};
 
-    // Bus
+   //// Bus ////
+   
     Bus BUS0 (
-        R0_q, R1_q, R2_q, R3_q,
+        R0_modified, R1_q, R2_q, R3_q,
         R4_q, R5_q, R6_q, R7_q,
         R8_q, R9_q, R10_q, R11_q,
         R12_q, R13_q, R14_q, R15_q,
@@ -200,10 +236,10 @@ module datapath (
         InPort_q,
         C_sign_extended,
 
-        Rout[0], Rout[1], Rout[2], Rout[3],
-        Rout[4], Rout[5], Rout[6], Rout[7],
-        Rout[8], Rout[9], Rout[10], Rout[11],
-        Rout[12], Rout[13], Rout[14], Rout[15],
+        Rout_decoded[0], Rout_decoded[1], Rout_decoded[2], Rout_decoded[3],
+        Rout_decoded[4], Rout_decoded[5], Rout_decoded[6], Rout_decoded[7],
+        Rout_decoded[8], Rout_decoded[9], Rout_decoded[10], Rout_decoded[11],
+        Rout_decoded[12], Rout_decoded[13], Rout_decoded[14], Rout_decoded[15],
 
         PCout,
         IRout,
