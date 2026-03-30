@@ -2,16 +2,23 @@
 db/
 incremental_db/
 output_files/
-simulation/
 *.rpt
 *.summary
 *.smsg
-*.qws
 *.jdi
 *.bak
-*.log
+*.qws
 
 # ModelSim junk
-vsim.wlf
+*.wlf
+*.log
 transcript
 work/
+vsim.wlf
+modelsim.ini
+
+# Ignore everything under simulation
+simulation/**
+
+# But keep all .do files anywhere under simulation
+!simulation/**/*.do

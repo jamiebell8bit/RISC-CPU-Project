@@ -81,7 +81,8 @@ module datapath (
     wire [31:0] R12_q, R13_q, R14_q, R15_q;
 
     //// Select & Decode ////
-
+	 wire [31:0] IR_q;
+	 
     wire [3:0] Ra = IR_q[26:23];
     wire [3:0] Rb = IR_q[22:19];
     wire [3:0] Rc = IR_q[18:15];
@@ -97,14 +98,17 @@ module datapath (
 
     reg [15:0] Rin_decoded, Rout_decoded;
 
-    always @(*) begin
-        Rin_decoded  = 16'b0;
-        Rout_decoded = 16'b0;
+  	always @(*) begin
+		 Rin_decoded  = 16'b0;
+		 Rout_decoded = 16'b0;
 
-        if (|Rin)   Rin_decoded[Sel]  = 1'b1;
-        if (|Rout)  Rout_decoded[Sel] = 1'b1;
-    end
+		 if (|Rin)
+			  Rin_decoded[Sel] = 1'b1;
 
+		 // BAout must also select the chosen Rb onto the bus
+		 if ((|Rout) || BAout)
+			  Rout_decoded[Sel] = 1'b1;
+	end
     //// Registers ////
 
     register #(32,32,32'h0) R0  (clear_int, Clock, Rin_decoded[0],  BusMuxOut, R0_q);
@@ -131,13 +135,13 @@ module datapath (
 
     //// Special Reg ////
 
-    wire [31:0] IR_q;
     wire [31:0] MAR_q;
     wire [31:0] MDR_q;
     wire [31:0] HI_q, LO_q;
     wire [31:0] Y_q;
     wire [63:0] Z_q;
     wire [31:0] InPort_q;
+	 wire [31:0] OutPort_q;
 
     //// PC as a normal register (loads via PCin) ////
     wire [31:0] PC_q;
@@ -165,7 +169,28 @@ module datapath (
     register #(32,32,32'h0) HI (clear_int, Clock, HIin, BusMuxOut, HI_q);
     register #(32,32,32'h0) LO (clear_int, Clock, LOin, BusMuxOut, LO_q);
     register #(32,32,32'h0) Y  (clear_int, Clock, Yin,  BusMuxOut, Y_q);
+	 
+	 
+	 
+	     //// Input / Output Ports ////
 
+    InPort INPORT0 (
+        .clear(clear_int),
+        .clock(Clock),
+        .ExternalInput(InPortData),
+        .BusMuxIn_InPort(InPort_q)
+    );
+
+    OutPort OUTPORT0 (
+        .clear(clear_int),
+        .clock(Clock),
+        .OutPortin(OutPortin),
+        .BusMuxOut(BusMuxOut),
+        .OutPortData(OutPort_q)
+    );
+	
+	
+	
     //// Con FF ////
 
     wire [1:0] cond = IR_q[20:19];
@@ -256,5 +281,6 @@ module datapath (
 
     assign MARData   = MAR_q;
     assign RAMDataOut = RAM_q;
+	 assign OutPortData = OutPort_q;
 
 endmodule
