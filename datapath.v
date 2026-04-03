@@ -219,7 +219,7 @@ module datapath (
 
     wire [31:0] Zhigh = Z_q[63:32];
     wire [31:0] Zlow  = Z_q[31:0];
-    wire [31:0] C_sign_extended = {{14{IR_q[18]}}, IR_q[17:0]};
+    wire [31:0] C_sign_extended = {{13{IR_q[18]}}, IR_q[18:0]};
 
     Bus BUS0 (
         R0_modified, R1_q, R2_q, R3_q,

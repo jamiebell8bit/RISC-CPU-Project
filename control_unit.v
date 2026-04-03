@@ -46,6 +46,8 @@ localparam S_FETCH0     = 8'd1;
 localparam S_FETCH1     = 8'd2;
 localparam S_FETCH2     = 8'd3;
 
+localparam S_DECODE     = 8'd4;
+
 localparam S_LDI3       = 8'd10;
 localparam S_LDI4       = 8'd11;
 localparam S_LDI5       = 8'd12;
@@ -110,44 +112,45 @@ always @(*) begin
     case (present_state)
         S_RESET:  next_state = S_FETCH0;
         S_FETCH0: next_state = S_FETCH1;
-        S_FETCH1: next_state = S_FETCH2;
+			S_FETCH1: next_state = S_FETCH2;
+			S_FETCH2: next_state = S_DECODE;
 
-        S_FETCH2: begin
-            case (opcode)
-                5'b10001: next_state = S_LDI3;
-                5'b10000: next_state = S_LD3;
-                5'b10010: next_state = S_ST3;
+			S_DECODE: begin
+				 case (opcode)
+					  5'b10001: next_state = S_LDI3;
+					  5'b10000: next_state = S_LD3;
+					  5'b10010: next_state = S_ST3;
 
-                5'b00000,
-                5'b00001,
-                5'b00010,
-                5'b00011,
-                5'b00100,
-                5'b00101,
-                5'b00110,
-                5'b00111,
-                5'b01000: next_state = S_R3;
+					  5'b00000,
+					  5'b00001,
+					  5'b00010,
+					  5'b00011,
+					  5'b00100,
+					  5'b00101,
+					  5'b00110,
+					  5'b00111,
+					  5'b01000: next_state = S_R3;
 
-                5'b01001,
-                5'b01010,
-                5'b01011: next_state = S_I3;
+					  5'b01001,
+					  5'b01010,
+					  5'b01011: next_state = S_I3;
 
-                5'b01110,
-                5'b01111: next_state = S_U3;
+					  5'b01110,
+					  5'b01111: next_state = S_U3;
 
-                5'b01100,
-                5'b01101: next_state = S_MULDIV3;
+					  5'b01100,
+					  5'b01101: next_state = S_MULDIV3;
 
-                5'b11000: next_state = S_MFHI3;
-                5'b11001: next_state = S_MFFLO3;
-                5'b10101: next_state = S_BRANCH3;
-                5'b10100: next_state = S_JR3;
-                5'b10011: next_state = S_JAL3;
-                5'b11010: next_state = S_FETCH0;
-                5'b11011: next_state = S_HALT;
-                default:  next_state = S_FETCH0;
-            endcase
-        end
+					  5'b11000: next_state = S_MFHI3;
+					  5'b11001: next_state = S_MFFLO3;
+					  5'b10101: next_state = S_BRANCH3;
+					  5'b10100: next_state = S_JR3;
+					  5'b10011: next_state = S_JAL3;
+					  5'b11010: next_state = S_FETCH0;
+					  5'b11011: next_state = S_HALT;
+					  default:  next_state = S_FETCH0;
+				 endcase
+			end
 
         S_LDI3: next_state = S_LDI4;
         S_LDI4: next_state = S_LDI5;
